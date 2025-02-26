@@ -11,6 +11,10 @@ Rails.application.routes.draw do
     collection do
       post 'login', to: 'sessions#login'
     end
+
+    member do
+      post 'upload_avatar', to: 'users#upload_avatar'
+    end
   end
 
   resources :campaigns, only: [:index, :show, :create, :update, :destroy]

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    before_action :set_user, only: [:show, :update, :destroy]
+    before_action :set_user, only: [:show, :update, :destroy, :upload_avatar]
 
     def index
         @users = User.all
@@ -39,6 +39,28 @@ class UsersController < ApplicationController
         render_json("User deleted successfully", 200, "success")
     end
 
+    def upload_avatar
+        if params[:avatar].present?
+            # Generate uniqname
+            filename = "#{SecureRandom.uuid}_#{params[:avatar].original_filename}"
+            filepath = Rails.root.join("public", "images", filename)
+
+            # save the file to the public/images folder
+            File.open(filepath, 'wb') do |file|
+                file.write(params[:avatar].read)
+            end
+
+            # update the user's avatar_filename field
+            binding.break
+            if @user.update(avatar_filename: filename)
+                render_json("Avatar uploaded successfully", 200, "success", { avatar_url: avatar_url(filename) } )
+            else
+                render_json("Failed to update avatar", 422, "error", @user.errors)
+            end
+        else
+            render_json("No avatar file provided", 400, "error")
+        end
+    end
     private
 
     def set_user
@@ -50,6 +72,10 @@ class UsersController < ApplicationController
     end
 
     def user_params
-        params.require(:user).permit(:name, :occupation, :email, :avatar_filename, :role, :password, :token)
+        params.require(:user).permit(:name, :occupation, :email, :avatar_filename, :avatar, :role, :password, :token)
+    end
+
+    def avatar_url(filename)
+        "#{request.base_url}/images/#{filename}"
     end
 end

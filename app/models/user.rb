@@ -8,6 +8,6 @@ class User < ApplicationRecord
     validates :role, presence: true
     # validates :password_hash, presence: true
     validates :token, uniqueness: true, allow_nil: true
-    validates :password, presence: true, length: { minimum: 6 }, allow_nil: false
+    validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
 end
