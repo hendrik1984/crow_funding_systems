@@ -51,7 +51,6 @@ class UsersController < ApplicationController
             end
 
             # update the user's avatar_filename field
-            binding.break
             if @user.update(avatar_filename: filename)
                 render_json("Avatar uploaded successfully", 200, "success", { avatar_url: avatar_url(filename) } )
             else
