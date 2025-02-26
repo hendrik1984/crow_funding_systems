@@ -42,7 +42,7 @@ class UsersController < ApplicationController
     def upload_avatar
         if params[:avatar].present?
             # Generate uniqname
-            filename = "#{SecureRandom.uuid}_#{params[:avatar].original_filename}"
+            filename = "#{@user.name.gsub(" ", "_")}-#{params[:avatar].original_filename}"
             filepath = Rails.root.join("public", "images", filename)
 
             # save the file to the public/images folder
