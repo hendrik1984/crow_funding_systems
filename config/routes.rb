@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
     member do
       post 'upload_avatar', to: 'users#upload_avatar'
+      delete 'remove_avatar', to: 'users#remove_avatar'
     end
   end
 

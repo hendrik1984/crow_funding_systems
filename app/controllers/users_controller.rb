@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    before_action :set_user, only: [:show, :update, :destroy, :upload_avatar]
+    before_action :set_user, only: [:show, :update, :destroy, :upload_avatar, :remove_avatar]
 
     def index
         @users = User.all
@@ -60,6 +60,22 @@ class UsersController < ApplicationController
             render_json("No avatar file provided", 400, "error")
         end
     end
+
+    def remove_avatar
+        if @user.avatar_filename.present?
+            filepath = Rails.root.join('public', 'images', @user.avatar_filename)
+            File.delete(filepath) if File.exist?(filepath)
+
+            if @user.update(avatar_filename: nil)
+                render_json("Avatar removed successfully", 200, "success")
+            else
+                render_json("Failed to remove avatar", 422, "error", @user.errors)
+            end
+        else
+            render_json("No avatar to remove", 404, "error")
+        end
+    end
+
     private
 
     def set_user
