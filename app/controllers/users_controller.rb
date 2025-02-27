@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+    before_action :authenticate_request, only: [:index, :show, :create, :update, :destroy]
     before_action :set_user, only: [:show, :update, :destroy, :upload_avatar, :remove_avatar]
 
     def index
