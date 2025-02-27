@@ -21,9 +21,12 @@ class ApplicationController < ActionController::API
             if token
                 decoded = JwtHelper.decode(token)
                 if decoded
-                    @current_user = User.select(:id, :name, :occupation, :email, :role).find(decoded[:user_id])
+                    #token expired
+                    render_json("Invalid token exp", 422, "error") if decoded[:exp] < Time.now.to_i
+
+                    @current_user = { user_id: decoded[:user_id], role: decoded[:role], exp: decoded[:exp] }
                 else
-                    render_json("Invalid_token", 401, "error")
+                    render_json("Invalid token", 401, "error")
                 end
             else
                 render_json("Authorization token missing", 422, "error")
