@@ -22,7 +22,7 @@ class ApplicationController < ActionController::API
                 decoded = JwtHelper.decode(token)
                 if decoded
                     #token expired
-                    render_json("Invalid token exp", 422, "error") if decoded[:exp] < Time.now.to_i
+                    #render_json("Invalid token exp", 422, "error") if decoded[:exp] < Time.now.to_i
 
                     @current_user = { user_id: decoded[:user_id], role: decoded[:role], exp: decoded[:exp] }
                 else
