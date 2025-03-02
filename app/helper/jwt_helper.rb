@@ -12,7 +12,7 @@ module JwtHelper
             decoded = JWT.decode(token, SECRET_KEY)[0]
             HashWithIndifferentAccess.new(decoded)
         rescue JWT::DecodeError
-            render_json("Invalid Token", 422, "error")
+            nil
         end
     end
 end
