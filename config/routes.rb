@@ -18,5 +18,16 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :campaigns, only: [:index, :show, :create, :update, :destroy]
+  resources :campaigns, only: [:index, :show, :create, :update, :destroy] do
+    resources :campaign_images, only: [:create, :update, :destroy] do 
+      member do
+        post 'update_campaign_image', to: 'campaign_images#update_campaign_image'
+        # delete 'delete_campaign_image', to: 'campaign_images#destroy_campaign_image'
+      end
+
+      collection do
+        delete '', to: 'campaign_images#destroy_all'
+      end
+    end
+  end
 end

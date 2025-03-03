@@ -1,5 +1,6 @@
 class Campaign < ApplicationRecord
     belongs_to :user
+    has_many :campaign_images, dependent: :destroy
 
     validates :name, presence: true
     validates :short_description, presence: true
@@ -8,5 +9,6 @@ class Campaign < ApplicationRecord
     validates :current_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
     validates :backer_count, presence: true, numericality: { greater_than_or_equal_to: 0 }
     validates :slug, presence: true, uniqueness: true
+    
     
 end

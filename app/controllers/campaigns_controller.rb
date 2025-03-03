@@ -1,27 +1,25 @@
 class CampaignsController < ApplicationController
+    before_action :authenticate_request, only: [:index, :show, :create, :update, :destroy]
     before_action :set_campaign, only: [:show, :update, :destroy]
   
     # GET /campaigns
     def index
         @campaigns = Campaign.all
-    #   render json: @campaigns
         render_json("Campaigns retrieved successfully", 200, "success", @campaigns)
     end
   
     # GET /campaigns/:id
     def show
-        # render json: @campaign
         render_json("Campaign retrieved successfully", 200, "success", @campaign)
     end
   
     # POST /campaigns
     def create
         @campaign = Campaign.new(campaign_params)
+        @campaign.user_id = current_user[:user_id]
         if @campaign.save
-            # render json: @campaign, status: :created
             render_json("Campaign created successfully", 200, "success", @campaign)
         else
-            # render json: @campaign.errors, status: :unprocessable_entity
             render_json("Campaign creation failed", 422, "error", @campaign.errors)
         end
     end
@@ -29,10 +27,8 @@ class CampaignsController < ApplicationController
     # PATCH/PUT /campaigns/:id
     def update
         if @campaign.update(campaign_params)
-            # render json: @campaign
             render_json("Campaign updated successfully", 200, "success", @campaign)
         else
-            # render json: @campaign.errors, status: :unprocessable_entity
             render_json("Campaign update failed", 422, "error", @campaign.errors)
         end
     end
@@ -40,7 +36,6 @@ class CampaignsController < ApplicationController
     # DELETE /campaigns/:id
     def destroy
         @campaign.destroy
-        # head :no_content
         render_json("Campaign deleted successfully", 200, "success")
     end
   
